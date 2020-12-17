@@ -1,0 +1,10 @@
+#!/bin/bash
+set -eux
+
+NAMES=$(lxc list -c n | grep '|' | grep -v 'NAME' | awk '{ print $2; }')
+
+for i in $NAMES; do
+  lxc-export-backup $i
+done
+
+

@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eux
+
+CONTAINER_NAME=$1
+DATE=$(date +"%Y-%m-%d-%H:%M:%S")
+SNAPSHOT_NAME="$CONTAINER_NAME-backup-$DATE"
+EXPORT_NAME="$SNAPSHOT_NAME-export"
+TARGET_DIR="$HOME/lxc-backups/$(hostname)"
+
+mkdir -p "$TARGET_DIR"
+lxc snapshot "$CONTAINER_NAME" "$SNAPSHOT_NAME"
+lxc publish "$CONTAINER_NAME/$SNAPSHOT_NAME" --alias "$EXPORT_NAME"
+lxc image export local:"$EXPORT_NAME" "$TARGET_DIR/$EXPORT_NAME"
+lxc image delete local:"$EXPORT_NAME" 
+lxc delete "$CONTAINER_NAME/$SNAPSHOT_NAME"
+

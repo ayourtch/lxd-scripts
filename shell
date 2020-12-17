@@ -1,0 +1,4 @@
+#!/bin/sh
+lxc exec $1 -- su -l ubuntu
+
+
